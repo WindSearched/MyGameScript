@@ -1,0 +1,49 @@
+public class Game : LSc
+{
+    public static float Angle(Vector3 cen, Vector3 first, Vector3 second)
+    {
+        double M_PI = 3.1415926535897;
+
+        double ma_x = first.x - cen.x;
+        double ma_y = first.y - cen.y;
+        double ma_z = first.z - cen.z;
+        double mb_x = second.x - cen.x;
+        double mb_y = second.y - cen.y;
+        double mb_z = second.z - cen.z;
+        double vl = (ma_x * mb_x) + (ma_y * mb_y) + (ma_z * mb_z);
+        double ma_val = Math.Sqrt(ma_x * ma_x + ma_y * ma_y + ma_z * ma_z);
+        double mb_val = Math.Sqrt(mb_x * mb_x + mb_y * mb_y + mb_z * mb_z);
+        double cosM = vl/(ma_val*mb_val);
+        double angleAMB = Math.Acos(cosM)*180/M_PI;
+
+        return (float)angleAMB;
+    }
+    public static bool IsLeft(Vector3 obj, Vector3 cen)
+    {
+        return obj.x <= cen.x;
+    }
+    public static void SetRotation(GameObject obj,Vector3 mPoint)
+    {
+        Vector3 canvas = GameObject.Find("Canvas").transform.position;
+        Vector3 p = new(canvas.x, canvas.y + 1);
+
+        float angle = Angle(canvas, p, mPoint);
+        if(IsLeft(mPoint,canvas))
+        {
+            obj.transform.eulerAngles = new Vector3(0f, 0f, angle);
+        }
+        else
+        {
+            obj.transform.eulerAngles = new Vector3(0f, 0f, -angle);
+        }
+    }
+    public static float GetHypotenuse(Vector3 cathetes)
+    {
+        return (float)Math.Sqrt(cathetes.x * cathetes.x + cathetes.y * cathetes.y);
+    }
+    public static Vector3 AroundProjet(Vector3 obj,float x)
+    {
+        float k = x / GetHypotenuse(obj);
+        return obj * k;
+    }
+}
